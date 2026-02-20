@@ -20,6 +20,7 @@ interface ExtraCard {
   value: number;
   isCurrency?: boolean;
   accentColor?: string;
+  subtitle?: string;
 }
 
 interface Props {
@@ -134,6 +135,11 @@ export default function StatusPipeline({ extraCards = [] }: Props) {
               <div style={{ fontSize: '1.25rem', fontWeight: 700, color: card.accentColor ?? '#0f172a', letterSpacing: '-0.03em', lineHeight: 1, marginTop: 6 }}>
                 {displayValue}
               </div>
+              {card.subtitle && (
+                <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 5, fontFamily: "'DM Sans', sans-serif" }}>
+                  {card.subtitle}
+                </div>
+              )}
             </div>
           );
         })}

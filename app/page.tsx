@@ -66,7 +66,7 @@ export default function Dashboard() {
             letterSpacing: '-0.02em',
             color: '#0f172a',
           }}>
-            Dashboard
+            Variation Register
           </span>
 
           <span style={{ color: 'rgba(0,0,0,0.15)', fontSize: 18, fontWeight: 300 }}>·</span>
@@ -111,12 +111,52 @@ export default function Dashboard() {
           {/* ─── VARIATION STATUS ─── */}
           <div style={{ marginBottom: 40 }}>
             <div className="label-tag">Variation Status</div>
-            <StatusPipeline />
+            <StatusPipeline extraCards={[{
+              title: 'At Risk',
+              value: atRiskValue,
+              isCurrency: true,
+              accentColor: '#ea580c',
+              subtitle: 'Captured + Submitted',
+            }]} />
           </div>
 
           {/* ─── PROJECTS + ACTIVITY ─── */}
           <div style={{ marginBottom: 40 }}>
-            <div className="label-tag">Projects & Activity</div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <div className="label-tag" style={{ margin: 0 }}>Projects & Activity</div>
+              <div className="no-print" style={{ display: 'flex', gap: 8 }}>
+                <button
+                  onClick={() => window.print()}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'transparent', color: '#64748b', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 13 }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#f8fafc'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
+                  </svg>
+                  Print
+                </button>
+                <button
+                  onClick={() => {
+                    const headers = ['Project', 'Qty', 'Draft', 'Submitted', 'Approved', 'Paid', 'Disputed', 'At Risk'];
+                    const csv = [headers.join(',')].join('\n');
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = 'variation-register.csv'; a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'rgba(34,197,94,0.06)', color: '#16a34a', border: '1px solid rgba(34,197,94,0.2)', borderRadius: 8, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 13 }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(34,197,94,0.12)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(34,197,94,0.06)'; }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Export CSV
+                </button>
+              </div>
+            </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <ProjectTable />
               <ActivityFeed />

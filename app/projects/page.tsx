@@ -169,7 +169,7 @@ export default function ProjectsPage() {
                       fontSize: 13, fontWeight: 700,
                       fontFamily: "'DM Sans', sans-serif",
                     }}>
-                      {variations.length} vars
+                      {variations.length} Qty
                     </span>
                   </div>
                 </div>
@@ -189,6 +189,38 @@ export default function ProjectsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Status count badges */}
+                {(() => {
+                  const STATUS_PILLS = [
+                    { key: 'Captured',  label: 'Draft',      bg: 'rgba(245,158,11,0.08)',  color: '#f59e0b', border: 'rgba(245,158,11,0.2)'  },
+                    { key: 'Submitted', label: 'Submitted',  bg: 'rgba(99,102,241,0.08)',  color: '#6366f1', border: 'rgba(99,102,241,0.2)'  },
+                    { key: 'Approved',  label: 'Approved',   bg: 'rgba(34,197,94,0.08)',   color: '#16a34a', border: 'rgba(34,197,94,0.2)'   },
+                    { key: 'Paid',      label: 'Paid',       bg: 'rgba(20,184,166,0.08)',  color: '#0d9488', border: 'rgba(20,184,166,0.2)'  },
+                    { key: 'Disputed',  label: 'Disputed',   bg: 'rgba(239,68,68,0.08)',   color: '#dc2626', border: 'rgba(239,68,68,0.2)'   },
+                  ];
+                  return (
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                      {STATUS_PILLS.map(p => {
+                        const cnt = variations.filter(v => v.status === p.key).length;
+                        return (
+                          <div key={p.key} style={{
+                            display: 'flex', alignItems: 'center', gap: 5,
+                            padding: '4px 10px',
+                            background: p.bg, color: p.color,
+                            border: `1px solid ${p.border}`,
+                            borderRadius: 100,
+                            fontFamily: "'DM Sans', sans-serif",
+                            fontSize: 12, fontWeight: 600,
+                          }}>
+                            <span style={{ fontWeight: 700 }}>{cnt}</span>
+                            <span style={{ opacity: 0.8 }}>{p.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
               </div>
             </Link>
           );

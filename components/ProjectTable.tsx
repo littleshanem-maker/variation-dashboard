@@ -50,9 +50,16 @@ export default function ProjectTable() {
           <thead>
             <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
               <th style={thStyle('left')}>Project</th>
-              <th style={thStyle('center')}>Vars</th>
+              <th style={thStyle('center')}>Qty</th>
               {STATUSES.map(s => (
-                <th key={s.key} style={thStyle('right', s.color)}>{s.label}</th>
+                <th key={s.key} style={thStyle('right', s.color)}>
+                  {s.label}
+                  {s.key === 'at-risk' && (
+                    <div style={{ fontSize: 10, fontWeight: 500, color: '#94a3b8', letterSpacing: '0.04em', textTransform: 'none', marginTop: 2 }}>
+                      Captured + Submitted
+                    </div>
+                  )}
+                </th>
               ))}
             </tr>
           </thead>
