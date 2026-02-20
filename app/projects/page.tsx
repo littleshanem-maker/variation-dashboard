@@ -179,33 +179,19 @@ export default function ProjectsPage() {
                 {/* Stats row */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
                   <div>
-                    <div style={{ fontSize: 13, color: '#94a3b8', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>Total Value</div>
+                    <div style={{ fontSize: 13, color: '#94a3b8', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>Variation Value</div>
                     <div style={{ fontSize: 18, fontWeight: 700, color: '#0f172a', letterSpacing: '-0.02em' }}>
                       {formatCurrencyCompact(totalVal)}
                     </div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 13, color: '#94a3b8', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>Approved</div>
+                    <div style={{ fontSize: 13, color: '#94a3b8', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>Approved Variations</div>
                     <div style={{ fontSize: 18, fontWeight: 700, color: '#22C55E', letterSpacing: '-0.02em' }}>
                       {formatCurrencyCompact(approvedVal)}
                     </div>
                   </div>
                 </div>
 
-                {/* Progress bar */}
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#94a3b8', marginBottom: 6 }}>
-                    <span>Approval progress</span>
-                    <span>{pct}%</span>
-                  </div>
-                  <div style={{ background: '#e2e8f0', borderRadius: 9999, height: 6 }}>
-                    <div style={{
-                      width: `${pct}%`,
-                      background: 'linear-gradient(90deg, #3b82f6, #22C55E)',
-                      height: 6, borderRadius: 9999,
-                      transition: 'width 0.7s ease',
-                    }} />
-                  </div>
                 </div>
               </div>
             </Link>

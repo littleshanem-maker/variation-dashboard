@@ -29,17 +29,30 @@ const NAV_ITEMS = [
   },
 ];
 
-const CTA_ITEM = {
-  href: '/variations/new',
-  label: 'New Variation',
-  icon: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="8" x2="12" y2="16" />
-      <line x1="8" y1="12" x2="16" y2="12" />
-    </svg>
-  ),
-};
+const CTA_ITEMS = [
+  {
+    href: '/projects/new',
+    label: 'New Project',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+        <line x1="12" y1="11" x2="12" y2="17" />
+        <line x1="9" y1="14" x2="15" y2="14" />
+      </svg>
+    ),
+  },
+  {
+    href: '/variations/new',
+    label: 'New Variation',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="16" />
+        <line x1="8" y1="12" x2="16" y2="12" />
+      </svg>
+    ),
+  },
+];
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -158,39 +171,42 @@ export default function Sidebar() {
           );
         })}
 
-        {/* CTA: New Variation */}
-        <div style={{ marginTop: 8 }}>
-          <Link
-            href={CTA_ITEM.href}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              padding: '9px 12px',
-              borderRadius: 8,
-              textDecoration: 'none',
-              color: pathname === CTA_ITEM.href ? '#ffffff' : '#3b82f6',
-              background: pathname === CTA_ITEM.href ? '#3b82f6' : 'rgba(59,130,246,0.1)',
-              border: '1px solid rgba(59,130,246,0.2)',
-              fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 600,
-              fontSize: 14,
-              transition: 'all 0.15s ease',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.background = '#3b82f6';
-              (e.currentTarget as HTMLElement).style.color = '#ffffff';
-            }}
-            onMouseLeave={e => {
-              if (pathname !== CTA_ITEM.href) {
-                (e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.1)';
-                (e.currentTarget as HTMLElement).style.color = '#3b82f6';
-              }
-            }}
-          >
-            <span style={{ flexShrink: 0 }}>{CTA_ITEM.icon}</span>
-            {CTA_ITEM.label}
-          </Link>
+        {/* CTAs: New Project + New Variation */}
+        <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {CTA_ITEMS.map(item => (
+            <Link
+              key={item.href}
+              href={item.href}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                padding: '9px 12px',
+                borderRadius: 8,
+                textDecoration: 'none',
+                color: pathname === item.href ? '#ffffff' : '#3b82f6',
+                background: pathname === item.href ? '#3b82f6' : 'rgba(59,130,246,0.1)',
+                border: '1px solid rgba(59,130,246,0.2)',
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 600,
+                fontSize: 14,
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.background = '#3b82f6';
+                (e.currentTarget as HTMLElement).style.color = '#ffffff';
+              }}
+              onMouseLeave={e => {
+                if (pathname !== item.href) {
+                  (e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.1)';
+                  (e.currentTarget as HTMLElement).style.color = '#3b82f6';
+                }
+              }}
+            >
+              <span style={{ flexShrink: 0 }}>{item.icon}</span>
+              {item.label}
+            </Link>
+          ))}
         </div>
       </nav>
 

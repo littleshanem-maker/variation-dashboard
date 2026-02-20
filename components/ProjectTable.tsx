@@ -44,7 +44,6 @@ export default function ProjectTable() {
 
   return (
     <div className="section-card" style={{ padding: '28px 24px' }}>
-      <h3 className="section-title" style={{ marginBottom: 20 }}>Project Breakdown</h3>
 
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
