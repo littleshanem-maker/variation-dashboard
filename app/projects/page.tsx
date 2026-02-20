@@ -98,8 +98,6 @@ export default function ProjectsPage() {
           const approvedVal = variations
             .filter(v => v.status === 'Approved' || v.status === 'Paid')
             .reduce((s, v) => s + v.value, 0);
-          const pct = totalVal > 0 ? Math.round((approvedVal / totalVal) * 100) : 0;
-
           return (
             <Link
               key={project.id}
@@ -190,8 +188,6 @@ export default function ProjectsPage() {
                       {formatCurrencyCompact(approvedVal)}
                     </div>
                   </div>
-                </div>
-
                 </div>
               </div>
             </Link>
