@@ -58,10 +58,10 @@ export default function Sidebar() {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: 220,
+        width: 240,
         height: '100vh',
-        background: '#ffffff',
-        borderRight: '1px solid #e2e8f0',
+        background: '#0F172A', // Dark Navy (match homepage footer/nav)
+        borderRight: '1px solid rgba(255,255,255,0.08)',
         display: 'flex',
         flexDirection: 'column',
         zIndex: 200,
@@ -71,56 +71,55 @@ export default function Sidebar() {
       {/* Logo */}
       <div
         style={{
-          padding: '20px 16px 16px',
-          borderBottom: '1px solid #e2e8f0',
+          padding: '24px 20px',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
           display: 'flex',
           alignItems: 'center',
-          gap: 10,
+          gap: 12,
         }}
       >
         <div
           style={{
             width: 32,
             height: 32,
-            background: '#3b82f6',
-            borderRadius: 7,
+            background: '#2563EB', // Brand Blue
+            borderRadius: 8,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Space Mono', monospace",
             fontWeight: 700,
-            fontSize: 13,
+            fontSize: 14,
             color: 'white',
             position: 'relative',
             overflow: 'hidden',
             flexShrink: 0,
           }}
         >
-          VC
+          LS
           <span
             style={{
               position: 'absolute',
               inset: 0,
-              background:
-                'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%)',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%)',
             }}
           />
         </div>
         <span
           style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 700,
+            fontWeight: 600,
             fontSize: 15,
-            letterSpacing: '-0.02em',
-            color: '#0f172a',
+            letterSpacing: '-0.01em',
+            color: '#F1F5F9', // Light text
           }}
         >
-          Variation Capture
+          Leveraged Systems
         </span>
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1, padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <nav style={{ flex: 1, padding: '20px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
         {NAV_ITEMS.map(item => {
           const active = isActive(item.href, item.exact);
           return (
@@ -130,39 +129,41 @@ export default function Sidebar() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 10,
-                padding: '9px 12px',
+                gap: 12,
+                padding: '10px 12px',
                 borderRadius: 8,
                 textDecoration: 'none',
-                color: active ? '#3b82f6' : '#64748b',
-                background: active ? 'rgba(59,130,246,0.08)' : 'transparent',
-                borderLeft: active ? '3px solid #3b82f6' : '3px solid transparent',
+                color: active ? '#FFFFFF' : '#94A3B8',
+                background: active ? 'rgba(37,99,235,0.15)' : 'transparent',
                 fontFamily: "'DM Sans', sans-serif",
-                fontWeight: active ? 600 : 400,
+                fontWeight: 500,
                 fontSize: 14,
                 transition: 'all 0.15s ease',
               }}
               onMouseEnter={e => {
                 if (!active) {
-                  (e.currentTarget as HTMLElement).style.background = '#f8fafc';
-                  (e.currentTarget as HTMLElement).style.color = '#0f172a';
+                  (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)';
+                  (e.currentTarget as HTMLElement).style.color = '#F1F5F9';
                 }
               }}
               onMouseLeave={e => {
                 if (!active) {
                   (e.currentTarget as HTMLElement).style.background = 'transparent';
-                  (e.currentTarget as HTMLElement).style.color = '#64748b';
+                  (e.currentTarget as HTMLElement).style.color = '#94A3B8';
                 }
               }}
             >
-              <span style={{ flexShrink: 0 }}>{item.icon}</span>
+              <span style={{ flexShrink: 0, opacity: active ? 1 : 0.7 }}>{item.icon}</span>
               {item.label}
             </Link>
           );
         })}
 
-        {/* CTAs: New Project + New Variation */}
-        <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {/* Divider */}
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '12px 0' }} />
+
+        {/* CTAs */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {CTA_ITEMS.map(item => (
             <Link
               key={item.href}
@@ -170,27 +171,27 @@ export default function Sidebar() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 10,
-                padding: '9px 12px',
+                gap: 12,
+                padding: '10px 12px',
                 borderRadius: 8,
                 textDecoration: 'none',
-                color: pathname === item.href ? '#ffffff' : '#3b82f6',
-                background: pathname === item.href ? '#3b82f6' : 'rgba(59,130,246,0.1)',
-                border: '1px solid rgba(59,130,246,0.2)',
+                color: '#3B82F6', // Blue-500
+                background: 'rgba(37,99,235,0.08)',
+                border: '1px solid rgba(37,99,235,0.15)',
                 fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 600,
                 fontSize: 14,
                 transition: 'all 0.15s ease',
               }}
               onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.background = '#3b82f6';
-                (e.currentTarget as HTMLElement).style.color = '#ffffff';
+                (e.currentTarget as HTMLElement).style.background = '#2563EB';
+                (e.currentTarget as HTMLElement).style.color = '#FFFFFF';
+                (e.currentTarget as HTMLElement).style.borderColor = '#2563EB';
               }}
               onMouseLeave={e => {
-                if (pathname !== item.href) {
-                  (e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.1)';
-                  (e.currentTarget as HTMLElement).style.color = '#3b82f6';
-                }
+                (e.currentTarget as HTMLElement).style.background = 'rgba(37,99,235,0.08)';
+                (e.currentTarget as HTMLElement).style.color = '#3B82F6';
+                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(37,99,235,0.15)';
               }}
             >
               <span style={{ flexShrink: 0 }}>{item.icon}</span>
@@ -200,23 +201,27 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      {/* Footer label */}
+      {/* User / Footer */}
       <div
         style={{
-          padding: '16px',
-          borderTop: '1px solid #e2e8f0',
+          padding: '20px',
+          borderTop: '1px solid rgba(255,255,255,0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12
         }}
       >
-        <span
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 10,
-            color: '#94a3b8',
-            letterSpacing: '0.08em',
-          }}
-        >
-          VARIATION CAPTURE v0.1
-        </span>
+        <div style={{
+          width: 36, height: 36, borderRadius: '50%', background: '#334155',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'white', fontSize: 14, fontWeight: 600
+        }}>
+          SL
+        </div>
+        <div>
+          <div style={{ fontSize: 14, color: 'white', fontWeight: 500 }}>Shane Little</div>
+          <div style={{ fontSize: 12, color: '#64748b' }}>Admin</div>
+        </div>
       </div>
     </aside>
   );
