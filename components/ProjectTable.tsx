@@ -6,25 +6,25 @@ import { formatCurrencyCompact } from '@/lib/mockData';
 
 const STATUSES = [
   { key: 'Captured',  label: 'Draft',     color: '#F59E0B' },
-  { key: 'Submitted', label: 'Submitted',  color: '#3b82f6' },
-  { key: 'Approved',  label: 'Approved',   color: '#22C55E' },
-  { key: 'Paid',      label: 'Paid',       color: '#6366F1' },
+  { key: 'Submitted', label: 'Submitted',  color: '#3B82F6' },
+  { key: 'Approved',  label: 'Approved',   color: '#10B981' },
+  { key: 'Paid',      label: 'Paid',       color: '#475569' },
   { key: 'Disputed',  label: 'Disputed',   color: '#EF4444' },
-  { key: 'at-risk',   label: 'At Risk',    color: '#F59E0B' },
+  { key: 'at-risk',   label: 'At Risk',    color: '#F97316' },
 ] as const;
 
 export default function ProjectTable() {
   const router = useRouter();
   const { projects, getVariationsByProjectId, variations: allVariations } = useAppStore();
 
-  const thStyle = (align: 'left' | 'center' | 'right', color = '#94a3b8') => ({
+  const thStyle = (align: 'left' | 'center' | 'right') => ({
     paddingBottom: 12,
     fontFamily: "'DM Sans', sans-serif",
     fontSize: 12,
-    fontWeight: 700 as const,
-    color,
+    fontWeight: 500 as const,
+    color: '#6B7280', // Medium grey (neutral)
     textTransform: 'uppercase' as const,
-    letterSpacing: '0.12em',
+    letterSpacing: '0.05em',
     textAlign: align,
   });
 
@@ -43,7 +43,9 @@ export default function ProjectTable() {
   }
 
   return (
-    <div className="section-card" style={{ padding: '28px 24px' }}>
+    <div className="section-card" style={{ padding: '24px', border: '1px solid #e2e8f0', borderRadius: 12, boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+      {/* 2.3 Section Heading */}
+      <h2 style={{ fontSize: 18, fontWeight: 600, color: '#111827', marginBottom: 20 }}>Projects & Activity</h2>
 
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
@@ -52,10 +54,10 @@ export default function ProjectTable() {
               <th style={thStyle('left')}>Project</th>
               <th style={thStyle('center')}>Qty</th>
               {STATUSES.map(s => (
-                <th key={s.key} style={thStyle('right', s.color)}>
+                <th key={s.key} style={thStyle('right')}>
                   {s.label}
                   {s.key === 'at-risk' && (
-                    <div style={{ fontSize: 10, fontWeight: 500, color: '#94a3b8', letterSpacing: '0.04em', textTransform: 'none', marginTop: 2 }}>
+                    <div style={{ fontSize: 10, fontWeight: 500, color: '#9CA3AF', letterSpacing: '0.04em', textTransform: 'none', marginTop: 2 }}>
                       Captured + Submitted
                     </div>
                   )}
@@ -80,24 +82,26 @@ export default function ProjectTable() {
                 <tr
                   key={project.id}
                   onClick={() => router.push(`/projects/${project.id}`)}
-                  style={{ borderBottom: '1px solid rgba(0,0,0,0.04)', cursor: 'pointer' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
+                  style={{ borderBottom: '1px solid #F3F4F6', cursor: 'pointer' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#F9FAFB')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                 >
-                  <td style={{ padding: '14px 12px 14px 0' }}>
-                    <div style={{ fontWeight: 600, color: '#0f172a', fontSize: 13 }}>{project.name}</div>
-                    <div style={{ fontSize: 13, color: '#94a3b8', marginTop: 2 }}>{project.contractType}</div>
+                  <td style={{ padding: '16px 12px 16px 0' }}>
+                    <div style={{ fontWeight: 500, color: '#111827', fontSize: 14 }}>{project.name}</div>
+                    <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>{project.contractType}</div>
                   </td>
 
-                  <td style={{ padding: '14px 0', textAlign: 'center' }}>
+                  <td style={{ padding: '16px 0', textAlign: 'center' }}>
                     <span style={{
                       display: 'inline-block',
-                      background: 'rgba(59,130,246,0.08)',
-                      color: '#3b82f6',
-                      padding: '3px 10px',
-                      borderRadius: 6,
+                      background: '#EFF6FF', // Blue-50
+                      color: '#2563EB', // Blue-600
+                      padding: '4px 10px',
+                      borderRadius: 100, // Pill
                       fontSize: 12,
-                      fontWeight: 700,
+                      fontWeight: 600,
+                      minWidth: 32, // Consistent width
+                      textAlign: 'center',
                       fontFamily: "'DM Sans', sans-serif",
                     }}>
                       {variations.length}
@@ -106,8 +110,15 @@ export default function ProjectTable() {
 
                   {STATUSES.map(s => {
                     const val = getVal(s.key);
+                    const isAtRisk = s.key === 'at-risk';
                     return (
-                      <td key={s.key} style={{ padding: '14px 0', textAlign: 'right', fontWeight: 600, color: val > 0 ? s.color : '#d1d5db' }}>
+                      <td key={s.key} style={{ 
+                        padding: '16px 0', 
+                        textAlign: 'right', 
+                        fontWeight: 500, 
+                        color: isAtRisk && val > 0 ? '#EA580C' : (val > 0 ? '#111827' : '#D1D5DB'), // Neutral unless at-risk
+                        fontSize: 14,
+                      }}>
                         {val > 0 ? formatCurrencyCompact(val) : '—'}
                       </td>
                     );
@@ -120,25 +131,35 @@ export default function ProjectTable() {
           {/* Totals row */}
           {projects.length > 0 && (
             <tfoot>
-              <tr style={{ borderTop: '2px solid #e2e8f0' }}>
-                <td style={{ padding: '12px 12px 4px 0', fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              <tr style={{ borderTop: '2px solid #E5E7EB' }}>
+                <td style={{ padding: '16px 12px 4px 0', fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
                   Totals
                 </td>
-                <td style={{ padding: '12px 0 4px', textAlign: 'center', fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 700, color: '#3b82f6' }}>
+                <td style={{ padding: '16px 0 4px', textAlign: 'center', fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 700, color: '#111827' }}>
                   {grandVars}
                 </td>
-                {STATUSES.map(s => (
-                  <td key={s.key} style={{ padding: '12px 0 4px', textAlign: 'right', fontWeight: 700, color: (grandTotal[s.key] ?? 0) > 0 ? s.color : '#d1d5db', fontSize: 13 }}>
-                    {(grandTotal[s.key] ?? 0) > 0 ? formatCurrencyCompact(grandTotal[s.key]) : '—'}
-                  </td>
-                ))}
+                {STATUSES.map(s => {
+                  const val = grandTotal[s.key] ?? 0;
+                  const isAtRisk = s.key === 'at-risk';
+                  return (
+                    <td key={s.key} style={{ 
+                      padding: '16px 0 4px', 
+                      textAlign: 'right', 
+                      fontWeight: 600, 
+                      color: isAtRisk && val > 0 ? '#EA580C' : (val > 0 ? '#111827' : '#D1D5DB'), 
+                      fontSize: 14 
+                    }}>
+                      {val > 0 ? formatCurrencyCompact(val) : '—'}
+                    </td>
+                  );
+                })}
               </tr>
             </tfoot>
           )}
         </table>
 
         {projects.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '40px 0', color: '#94a3b8', fontSize: 14 }}>
+          <div style={{ textAlign: 'center', padding: '40px 0', color: '#9CA3AF', fontSize: 14 }}>
             No projects yet
           </div>
         )}
