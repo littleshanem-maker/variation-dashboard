@@ -49,7 +49,7 @@ export default function Dashboard() {
           color: '#111827',
           letterSpacing: '-0.02em',
         }}>
-          Dashboard
+          Variation Register
         </h1>
 
         {/* Right: Actions/Status */}
@@ -95,12 +95,9 @@ export default function Dashboard() {
             }]} />
           </div>
 
-          {/* ─── TWO COL GRID ─── */}
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
-            {/* Left Col: Projects */}
+          {/* ─── STACKED LAYOUT (Projects then Activity) ─── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <ProjectTable />
-            
-            {/* Right Col: Feed */}
             <ActivityFeed />
           </div>
 
