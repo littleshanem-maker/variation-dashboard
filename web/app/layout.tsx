@@ -1,7 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { AppStoreProvider } from '@/lib/store';
-import Sidebar from './components/Sidebar';
 
 export const metadata: Metadata = {
   title: 'Variation Capture',
@@ -25,12 +24,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className="antialiased">
         <AppStoreProvider>
-          <div style={{ display: 'flex', minHeight: '100vh' }}>
-            <Sidebar />
-            <main style={{ flex: 1, marginLeft: 220, minWidth: 0 }}>
-              {children}
-            </main>
-          </div>
+          {children}
         </AppStoreProvider>
       </body>
     </html>
