@@ -61,39 +61,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Social Buttons */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
-          <button style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-            width: '100%', height: 44,
-            background: 'white', border: '1px solid #e6ebf1', borderRadius: 8,
-            fontSize: 15, fontWeight: 500, color: '#3c4257',
-            cursor: 'pointer', transition: 'all 0.2s',
-          }}>
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="" />
-            Continue with Google
-          </button>
-          
-          <button style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-            width: '100%', height: 44,
-            background: 'white', border: '1px solid #e6ebf1', borderRadius: 8,
-            fontSize: 15, fontWeight: 500, color: '#3c4257',
-            cursor: 'pointer', transition: 'all 0.2s',
-          }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1v7z"/>
-            </svg>
-            Continue with SSO
-          </button>
-        </div>
-
-        {/* Divider */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-          <div style={{ flex: 1, height: 1, background: '#e6ebf1' }} />
-          <span style={{ fontSize: 13, color: '#697386' }}>or</span>
-          <div style={{ flex: 1, height: 1, background: '#e6ebf1' }} />
-        </div>
 
         {/* Form */}
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
