@@ -5,9 +5,29 @@ import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/lib/store';
 import { formatCurrencyCompact } from '@/lib/mockData';
 
+const STATUSES = [
+  { key: 'Captured',  label: 'Draft',     color: '#F59E0B' },
+  { key: 'Submitted', label: 'Submitted',  color: '#3b82f6' },
+  { key: 'Approved',  label: 'Approved',   color: '#22C55E' },
+  { key: 'Paid',      label: 'Paid',       color: '#6366F1' },
+  { key: 'Disputed',  label: 'Disputed',   color: '#EF4444' },
+  { key: 'at-risk',   label: 'At Risk',    color: '#F59E0B' },
+] as const;
+
 export default function ProjectsPage() {
   const router = useRouter();
   const { projects, getVariationsByProjectId } = useAppStore();
+
+  const thStyle = (align: 'left' | 'center' | 'right', color = '#94a3b8') => ({
+    paddingBottom: 12,
+    fontFamily: "'DM Sans', sans-serif",
+    fontSize: 12,
+    fontWeight: 700 as const,
+    color,
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.12em',
+    textAlign: align,
+  });
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', padding: '40px' }}>
@@ -86,146 +106,86 @@ export default function ProjectsPage() {
         </div>
       )}
 
-      {/* Project Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 20,
-      }}>
-        {projects.map(project => {
-          const variations = getVariationsByProjectId(project.id);
-          const totalVal = variations.reduce((s, v) => s + v.value, 0);
-          const approvedVal = variations
-            .filter(v => v.status === 'Approved' || v.status === 'Paid')
-            .reduce((s, v) => s + v.value, 0);
-          return (
-            <Link
-              key={project.id}
-              href={`/projects/${project.id}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <div
-                style={{
-                  background: '#ffffff',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: 16,
-                  padding: '24px',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(59,130,246,0.3)';
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(59,130,246,0.08)';
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.transform = 'none';
-                  (e.currentTarget as HTMLElement).style.borderColor = '#e2e8f0';
-                  (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-                }}
-              >
-                {/* Gradient top border */}
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, right: 0,
-                  height: 3,
-                  background: 'linear-gradient(90deg, #3b82f6, #6366f1)',
-                }} />
+      {/* Projects Table */}
+      {projects.length > 0 && (
+        <div className="section-card" style={{ padding: '28px 24px', background: 'white', borderRadius: 16, border: '1px solid #e2e8f0' }}>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
+                  <th style={thStyle('left')}>Project</th>
+                  <th style={thStyle('center')}>Qty</th>
+                  {STATUSES.map(s => (
+                    <th key={s.key} style={thStyle('right', s.color)}>
+                      {s.label}
+                      {s.key === 'at-risk' && (
+                        <div style={{ fontSize: 10, fontWeight: 500, color: '#94a3b8', letterSpacing: '0.04em', textTransform: 'none', marginTop: 2 }}>
+                          Captured + Submitted
+                        </div>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {projects.map((project) => {
+                  const variations = getVariationsByProjectId(project.id);
 
-                {/* Header row */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h3 style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: 16, fontWeight: 700,
-                      color: '#0f172a',
-                      letterSpacing: '-0.01em',
-                      marginBottom: 4,
-                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                    }}>
-                      {project.name}
-                    </h3>
-                    <div style={{ fontSize: 13, color: '#64748b' }}>{project.client}</div>
-                  </div>
-                  <div style={{ display: 'flex', gap: 8, flexShrink: 0, marginLeft: 12 }}>
-                    <span style={{
-                      padding: '3px 10px',
-                      background: 'rgba(99,102,241,0.08)',
-                      color: '#6366f1',
-                      border: '1px solid rgba(99,102,241,0.2)',
-                      borderRadius: 100,
-                      fontSize: 13, fontWeight: 600,
-                      fontFamily: "'DM Sans', sans-serif",
-                    }}>
-                      {project.contractType}
-                    </span>
-                    <span style={{
-                      padding: '3px 10px',
-                      background: 'rgba(59,130,246,0.08)',
-                      color: '#3b82f6',
-                      border: '1px solid rgba(59,130,246,0.2)',
-                      borderRadius: 100,
-                      fontSize: 13, fontWeight: 700,
-                      fontFamily: "'DM Sans', sans-serif",
-                    }}>
-                      {variations.length} Qty
-                    </span>
-                  </div>
-                </div>
+                  const getVal = (key: string) => {
+                    if (key === 'at-risk') {
+                      return variations
+                        .filter(v => v.status === 'Captured' || v.status === 'Submitted')
+                        .reduce((sum, v) => sum + v.value, 0);
+                    }
+                    return variations.filter(v => v.status === key).reduce((sum, v) => sum + v.value, 0);
+                  };
 
-                {/* Stats row */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-                  <div>
-                    <div style={{ fontSize: 13, color: '#94a3b8', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>Variation Value</div>
-                    <div style={{ fontSize: 18, fontWeight: 700, color: '#0f172a', letterSpacing: '-0.02em' }}>
-                      {formatCurrencyCompact(totalVal)}
-                    </div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 13, color: '#94a3b8', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>Approved Variations</div>
-                    <div style={{ fontSize: 18, fontWeight: 700, color: '#22C55E', letterSpacing: '-0.02em' }}>
-                      {formatCurrencyCompact(approvedVal)}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Status count badges */}
-                {(() => {
-                  const STATUS_PILLS = [
-                    { key: 'Captured',  label: 'Draft',      bg: 'rgba(245,158,11,0.08)',  color: '#f59e0b', border: 'rgba(245,158,11,0.2)'  },
-                    { key: 'Submitted', label: 'Submitted',  bg: 'rgba(99,102,241,0.08)',  color: '#6366f1', border: 'rgba(99,102,241,0.2)'  },
-                    { key: 'Approved',  label: 'Approved',   bg: 'rgba(34,197,94,0.08)',   color: '#16a34a', border: 'rgba(34,197,94,0.2)'   },
-                    { key: 'Paid',      label: 'Paid',       bg: 'rgba(20,184,166,0.08)',  color: '#0d9488', border: 'rgba(20,184,166,0.2)'  },
-                    { key: 'Disputed',  label: 'Disputed',   bg: 'rgba(239,68,68,0.08)',   color: '#dc2626', border: 'rgba(239,68,68,0.2)'   },
-                  ];
                   return (
-                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                      {STATUS_PILLS.map(p => {
-                        const cnt = variations.filter(v => v.status === p.key).length;
+                    <tr
+                      key={project.id}
+                      onClick={() => router.push(`/projects/${project.id}`)}
+                      style={{ borderBottom: '1px solid rgba(0,0,0,0.04)', cursor: 'pointer' }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <td style={{ padding: '14px 12px 14px 0' }}>
+                        <div style={{ fontWeight: 600, color: '#0f172a', fontSize: 14 }}>{project.name}</div>
+                        <div style={{ fontSize: 13, color: '#64748b', marginTop: 2 }}>
+                          {project.client} · <span style={{color: '#94a3b8'}}>{project.contractType}</span>
+                        </div>
+                      </td>
+
+                      <td style={{ padding: '14px 0', textAlign: 'center' }}>
+                        <span style={{
+                          display: 'inline-block',
+                          background: 'rgba(59,130,246,0.08)',
+                          color: '#3b82f6',
+                          padding: '3px 10px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          fontWeight: 700,
+                          fontFamily: "'DM Sans', sans-serif",
+                        }}>
+                          {variations.length}
+                        </span>
+                      </td>
+
+                      {STATUSES.map(s => {
+                        const val = getVal(s.key);
                         return (
-                          <div key={p.key} style={{
-                            display: 'flex', alignItems: 'center', gap: 5,
-                            padding: '4px 10px',
-                            background: p.bg, color: p.color,
-                            border: `1px solid ${p.border}`,
-                            borderRadius: 100,
-                            fontFamily: "'DM Sans', sans-serif",
-                            fontSize: 12, fontWeight: 600,
-                          }}>
-                            <span style={{ fontWeight: 700 }}>{cnt}</span>
-                            <span style={{ opacity: 0.8 }}>{p.label}</span>
-                          </div>
+                          <td key={s.key} style={{ padding: '14px 0', textAlign: 'right', fontWeight: 600, color: val > 0 ? s.color : '#d1d5db' }}>
+                            {val > 0 ? formatCurrencyCompact(val) : '—'}
+                          </td>
                         );
                       })}
-                    </div>
+                    </tr>
                   );
-                })()}
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
