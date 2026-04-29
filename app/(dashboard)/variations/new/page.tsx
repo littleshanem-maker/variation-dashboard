@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/lib/store';
 
@@ -32,7 +32,7 @@ export default function NewVariationPage() {
   const { projects, addVariation } = useAppStore();
 
   const [form, setForm] = useState({
-    projectId: projects[0]?.id ?? '',
+    projectId: '',
     title: '',
     description: '',
     value: '',
@@ -41,6 +41,13 @@ export default function NewVariationPage() {
   });
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Auto-select first project once projects have loaded
+  useEffect(() => {
+    if (projects.length > 0 && !form.projectId) {
+      setForm(f => ({ ...f, projectId: projects[0].id }));
+    }
+  }, [projects, form.projectId]);
 
   const set = (field: string, value: string) => {
     setForm(f => ({ ...f, [field]: value }));
